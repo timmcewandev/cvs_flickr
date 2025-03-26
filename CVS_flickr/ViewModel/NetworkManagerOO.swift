@@ -10,7 +10,7 @@ import Combine
 
 class NetworkManagerOO: ObservableObject {
     @Published var flikerItems: [FlickrItem.Item] = []
-    @Published var textName: String = ""
+    @Published var textName: String = "cheetah"
     @Published var errorMessage: String? = nil
     private var cancellables = Set<AnyCancellable>()
     
