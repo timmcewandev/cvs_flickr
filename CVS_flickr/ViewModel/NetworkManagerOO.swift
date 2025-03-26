@@ -22,6 +22,7 @@ class NetworkManagerOO: ObservableObject {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         decoder.keyDecodingStrategy = .convertFromSnakeCase
+        
         URLSession.shared.dataTaskPublisher(for: url)
             .map { $0.data }
             .decode(type: FlickrItem.self, decoder: decoder)
@@ -29,11 +30,17 @@ class NetworkManagerOO: ObservableObject {
             .sink(
                 receiveCompletion: { completion in
                     if case let .failure(error) = completion {
-                        self.errorMessage = error.localizedDescription
+                        DispatchQueue.main.async {
+                            self.errorMessage = error.localizedDescription
+                        }
                     }
                 },
                 receiveValue: { [weak self] flikerItem in
-                    self?.flikerItems = flikerItem.items
+                    DispatchQueue.main.async {
+                        self?.flikerItems = flikerItem.items
+                        self?.errorMessage = nil
+                    }
+                    
                 }
             )
             .store(in: &cancellables)

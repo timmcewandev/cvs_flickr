@@ -22,30 +22,34 @@ struct FlickrMain: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                LazyVGrid(columns: columns, spacing: 10) {
+                LazyVGrid(columns: columns, spacing: 20) {
                     ForEach($oo.flikerItems.indices, id: \.self) { indicies in
-                        let photo = oo.flikerItems[indicies]
-                        AsyncImage(url: URL(string: (photo.media.m))) {
+                        let photo = oo.flikerItems[indicies].media.m
+                        AsyncImage(url: URL(string: (photo))) {
                             status in
                             switch status {
                             case .success(let image):
                                 image
                                     .resizable()
                                     .aspectRatio(contentMode: .fill)
+                                    .frame(width: 200, height: 200)
                                     .cornerRadius(10)
                                     .clipShape(Rectangle())
                                     .transition(.scale)
                             case .failure:
                                 Image(systemName:"photo")
                                     .resizable()
-                                    .aspectRatio(contentMode: .fill)
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 200, height: 200)
+                                    .cornerRadius(10)
+                                    .clipShape(Rectangle())
                                     .transition(.scale)
                             case .empty:
                                 ProgressView()
                             @unknown default:
                                 EmptyView()
                             }
-                            
+                                
                         }
                         // Mark: Tap indvidual picture
                         .onTapGesture {
@@ -65,6 +69,7 @@ struct FlickrMain: View {
         }
         .searchable(text: $oo.textName, prompt: "Search")
         .onChange(of: oo.textName) { value in
+            selectedImage = false
             Task {
                 oo.fetchFlickerImages(name: value)
             }

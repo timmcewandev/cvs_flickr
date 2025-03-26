@@ -12,7 +12,8 @@ struct FlickrDetailView: View {
     var body: some View {
         VStack(alignment: .leading) {
         Spacer()
-            AsyncImage(url: URL(string: (flickr?.media.m)!)) {
+            
+            AsyncImage(url: URL(string: (flickr?.media.m ?? "https://placehold.co/400"))) {
                 status in
                 switch status {
                 case .success(let image):
@@ -33,7 +34,6 @@ struct FlickrDetailView: View {
                 }
             }
             .padding(.horizontal)
-            .frame(width: 400, height: 400)
             VStack(alignment: .leading, spacing: 5) {
                 Text("Description:")
                     .font(.title2)
@@ -43,7 +43,6 @@ struct FlickrDetailView: View {
                     .font(.title2)
                 Text(attributedString(from: flickr?.author ?? "no author"))
                     .font(.body)
-                
                 Text("Date Published:")
                     .font(.title2)
                 Text(flickr?.published?.formatted() ?? "no date")
