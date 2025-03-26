@@ -25,6 +25,7 @@ struct FlickrMain: View {
                 LazyVGrid(columns: columns, spacing: 20) {
                     ForEach($oo.flikerItems.indices, id: \.self) { indicies in
                         let photo = oo.flikerItems[indicies].media.m
+                        let accesslabel = oo.flikerItems[indicies].title
                         AsyncImage(url: URL(string: (photo))) {
                             status in
                             switch status {
@@ -36,6 +37,10 @@ struct FlickrMain: View {
                                     .cornerRadius(10)
                                     .clipShape(Rectangle())
                                     .transition(.scale)
+                                    .accessibilityHidden(false)
+                                    .accessibilityAddTraits(.isImage)
+                                    .accessibilityLabel(Text(accesslabel ?? "Tapable Image"))
+                                    .accessibilityHint(Text("Tap to view details"))
                             case .failure:
                                 Image(systemName:"photo")
                                     .resizable()
@@ -44,6 +49,11 @@ struct FlickrMain: View {
                                     .cornerRadius(10)
                                     .clipShape(Rectangle())
                                     .transition(.scale)
+                                    .accessibilityHidden(false)
+                                    .accessibilityAddTraits(.isImage)
+                                    .accessibilityLabel(Text(accesslabel ?? "Picture is not available"))
+                                            
+                                    .accessibilityHint(Text("Tap to view details"))
                             case .empty:
                                 ProgressView()
                             @unknown default:
