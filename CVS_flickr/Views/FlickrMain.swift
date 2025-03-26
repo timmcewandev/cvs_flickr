@@ -23,9 +23,9 @@ struct FlickrMain: View {
         NavigationStack {
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 20) {
-                    ForEach($oo.flikerItems.indices, id: \.self) { indicies in
-                        let photo = oo.flikerItems[indicies].media.m
-                        let accesslabel = oo.flikerItems[indicies].title
+                    ForEach($oo.flikerItems.indices, id: \.self) { index in
+                        let photo = oo.flikerItems[index].media.m
+                        let accesslabel = oo.flikerItems[index].title
                         AsyncImage(url: URL(string: (photo))) {
                             status in
                             switch status {
@@ -52,25 +52,25 @@ struct FlickrMain: View {
                                     .accessibilityHidden(false)
                                     .accessibilityAddTraits(.isImage)
                                     .accessibilityLabel(Text(accesslabel ?? "Picture is not available"))
-                                            
                                     .accessibilityHint(Text("Tap to view details"))
                             case .empty:
                                 ProgressView()
                             @unknown default:
                                 EmptyView()
                             }
-                                
                         }
                         // Mark: Tap indvidual picture
                         .onTapGesture {
-                            selectedImage.toggle()
-                            selectedIndicy = indicies
+                            if oo.flikerItems.indices.contains(index) {
+                                selectedImage.toggle()
+                                selectedIndicy = index
+                            }
                         }
                     }
                 }
                 .padding(.horizontal)
                 .navigationDestination(isPresented: $selectedImage, destination: {
-                    if let indicy = selectedIndicy {
+                    if let indicy = selectedIndicy, indicy >= 0, indicy < oo.flikerItems.count {
                         FlickrDetailView(flickr: oo.flikerItems[indicy])
                     }
                 })
