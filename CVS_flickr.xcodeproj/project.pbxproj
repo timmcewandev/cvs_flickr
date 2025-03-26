@@ -45,11 +45,6 @@
 			path = CVS_flickrUITests;
 			sourceTree = "<group>";
 		};
-		8495A0472D943B2900DC5C42 /* Preview Content */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "Preview Content";
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,7 +76,6 @@
 			isa = PBXGroup;
 			children = (
 				84959FFE2D94382500DC5C42 /* CVS_flickr */,
-				8495A0472D943B2900DC5C42 /* Preview Content */,
 				8495A00F2D94382700DC5C42 /* CVS_flickrTests */,
 				8495A0192D94382700DC5C42 /* CVS_flickrUITests */,
 				84959FFD2D94382500DC5C42 /* Products */,
@@ -115,7 +109,6 @@
 			);
 			fileSystemSynchronizedGroups = (
 				84959FFE2D94382500DC5C42 /* CVS_flickr */,
-				8495A0472D943B2900DC5C42 /* Preview Content */,
 			);
 			name = CVS_flickr;
 			packageProductDependencies = (

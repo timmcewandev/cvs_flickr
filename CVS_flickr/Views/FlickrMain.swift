@@ -6,10 +6,72 @@
 //
 
 import SwiftUI
+import Combine
 
 struct FlickrMain: View {
+    // Mark: - State & StateObject
+    @StateObject private var oo = NetworkManagerOO()
+    @State var s = StateFlickrMain()
+    
+    
+    let columns = [
+        GridItem(.adaptive(minimum: 200))
+    ]
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationStack {
+            ScrollView {
+                LazyVGrid(columns: columns, spacing: 10) {
+                    ForEach($oo.flikerItems.indices, id: \.self) { indicies in
+                        let photo = oo.flikerItems[indicies]
+                        AsyncImage(url: URL(string: (photo.media.m))) {
+                            status in
+                            switch status {
+                            case .success(let image):
+                                image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .cornerRadius(10)
+                                    .clipShape(Rectangle())
+                                    .transition(.scale)
+                            case .failure:
+                                Image(systemName:"photo")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .transition(.scale)
+                            case .empty:
+                                ProgressView()
+                            @unknown default:
+                                EmptyView()
+                            }
+                            
+                        }
+                        // Mark: Tap indvidual picture
+                        .onTapGesture {
+                            s.selectedImage.toggle()
+                            s.selectedIndicy = indicies
+                        }
+                    }
+                }
+                .padding(.horizontal)
+                .navigationDestination(isPresented: $s.selectedImage, destination: {
+                    if s.selectedIndicy != nil {
+                        
+//                        FlickrDetailView(flickr: oo.flikerItems[indicy])
+                    }
+                })
+            }
+            
+        }
+        .searchable(text: $oo.textName, prompt: "Search")
+        .onChange(of: oo.textName) { value in
+            Task {
+                oo.fetchFlickerImages(name: value)
+            }
+        }
+        .task {
+            oo.fetchFlickerImages(name: oo.textName)
+        }
     }
 }
 
