@@ -11,7 +11,8 @@ import Combine
 struct FlickrMain: View {
     // Mark: - State & StateObject
     @StateObject private var oo = NetworkManagerOO()
-    @State var s = StateFlickrMain()
+    @State var selectedImage: Bool = false
+    @State var selectedIndicy: Int?
     
     
     let columns = [
@@ -48,16 +49,15 @@ struct FlickrMain: View {
                         }
                         // Mark: Tap indvidual picture
                         .onTapGesture {
-                            s.selectedImage.toggle()
-                            s.selectedIndicy = indicies
+                            selectedImage.toggle()
+                            selectedIndicy = indicies
                         }
                     }
                 }
                 .padding(.horizontal)
-                .navigationDestination(isPresented: $s.selectedImage, destination: {
-                    if s.selectedIndicy != nil {
-                        
-//                        FlickrDetailView(flickr: oo.flikerItems[indicy])
+                .navigationDestination(isPresented: $selectedImage, destination: {
+                    if let indicy = selectedIndicy {
+                        FlickrDetailView(flickr: oo.flikerItems[indicy])
                     }
                 })
             }
