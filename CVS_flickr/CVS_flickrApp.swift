@@ -11,7 +11,7 @@ import SwiftUI
 struct CVS_flickrApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            FlickrMain()
         }
     }
 }
