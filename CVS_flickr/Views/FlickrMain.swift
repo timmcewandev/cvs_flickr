@@ -22,7 +22,7 @@ struct FlickrMain: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                LazyVGrid(columns: columns, spacing: 20) {
+                LazyVGrid(columns: Array(repeating: GridItem(.adaptive(minimum: 100)), count: 2), spacing: 20) {
                     ForEach($oo.flikerItems.indices, id: \.self) { index in
                         let photo = oo.flikerItems[index].media.m
                         let accesslabel = oo.flikerItems[index].title
@@ -32,8 +32,7 @@ struct FlickrMain: View {
                             case .success(let image):
                                 image
                                     .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(width: 200, height: 200)
+                                    .aspectRatio(contentMode: .fit)
                                     .cornerRadius(10)
                                     .clipShape(Rectangle())
                                     .transition(.scale)
@@ -45,7 +44,6 @@ struct FlickrMain: View {
                                 Image(systemName:"photo")
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
-                                    .frame(width: 200, height: 200)
                                     .cornerRadius(10)
                                     .clipShape(Rectangle())
                                     .transition(.scale)
